@@ -25,15 +25,12 @@ export type Revenue = {
   revenue: number;
 };
 
-export type LatestInvoice = {
+export type LatestExpense = {
   id: string;
-  name: string;
-  image_url: string;
-  email: string;
   amount: string;
 };
 
-export type LatestInvoiceRaw = Omit<LatestInvoice, 'amount'> & {
+export type LatestExpenseRaw = Omit<LatestExpense, 'amount'> & {
   amount: number;
 };
 
