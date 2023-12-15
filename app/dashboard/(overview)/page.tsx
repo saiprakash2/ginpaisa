@@ -2,10 +2,10 @@ import { Card } from '@/components/cards';
 import RevenueChart from '@/components/revenue-chart';
 import LatestInvoices from '@/components/latest-invoices';
 import { lusitana } from '@/styles/fonts';
-import { fetchLatestExpenses } from '@/lib/data';
+import { Suspense } from 'react';
+import { LatestInvoicesSkeleton } from '@/components/skeletons';
 
 export default async function Page() {
-  const latestExpenses = await fetchLatestExpenses();
   return (
     <main>
       <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
@@ -23,7 +23,9 @@ export default async function Page() {
       </div>
       <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
         {/* <RevenueChart revenue={revenue}  /> */}
-        <LatestInvoices latestExpenses={latestExpenses} />
+        <Suspense fallback={<LatestInvoicesSkeleton />}>
+          <LatestInvoices />
+        </Suspense>
       </div>
     </main>
   );

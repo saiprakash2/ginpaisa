@@ -3,7 +3,7 @@ import {
   CustomerField,
   CustomersTableType,
   InvoiceForm,
-  InvoicesTable,
+  ExpensesTable,
   LatestExpenseRaw,
   User,
   Revenue,
@@ -36,6 +36,7 @@ export async function fetchRevenue() {
 
 export async function fetchLatestExpenses() {
   noStore();
+
   try {
     const data = await sql<LatestExpenseRaw>`
       SELECT expenses.amount, expenses.id
@@ -91,7 +92,7 @@ export async function fetchCardData() {
 }
 
 const ITEMS_PER_PAGE = 6;
-export async function fetchFilteredInvoices(
+export async function fetchFilteredExpenses(
   query: string,
   currentPage: number,
 ) {
@@ -99,46 +100,34 @@ export async function fetchFilteredInvoices(
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
   try {
-    const invoices = await sql<InvoicesTable>`
+    const expenses = await sql<ExpensesTable>`
       SELECT
-        invoices.id,
-        invoices.amount,
-        invoices.date,
-        invoices.status,
-        customers.name,
-        customers.email,
-        customers.image_url
-      FROM invoices
-      JOIN customers ON invoices.customer_id = customers.id
+        expenses.id,
+        expenses.amount,
+        expenses.date
+      FROM expenses
       WHERE
-        customers.name ILIKE ${`%${query}%`} OR
-        customers.email ILIKE ${`%${query}%`} OR
-        invoices.amount::text ILIKE ${`%${query}%`} OR
-        invoices.date::text ILIKE ${`%${query}%`} OR
-        invoices.status ILIKE ${`%${query}%`}
-      ORDER BY invoices.date DESC
+        expenses.amount::text ILIKE ${`%${query}%`} OR
+        expenses.date::text ILIKE ${`%${query}%`}
+      ORDER BY expenses.date DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
 
-    return invoices.rows;
+    return expenses.rows;
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch invoices.');
+    throw new Error('Failed to fetch expenses.');
   }
 }
 
-export async function fetchInvoicesPages(query: string) {
+export async function fetchExpensesPages(query: string) {
   noStore();
   try {
     const count = await sql`SELECT COUNT(*)
-    FROM invoices
-    JOIN customers ON invoices.customer_id = customers.id
+    FROM expenses
     WHERE
-      customers.name ILIKE ${`%${query}%`} OR
-      customers.email ILIKE ${`%${query}%`} OR
-      invoices.amount::text ILIKE ${`%${query}%`} OR
-      invoices.date::text ILIKE ${`%${query}%`} OR
-      invoices.status ILIKE ${`%${query}%`}
+      expenses.amount::text ILIKE ${`%${query}%`} OR
+      expenses.date::text ILIKE ${`%${query}%`}
   `;
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
