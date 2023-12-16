@@ -1,5 +1,6 @@
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { deleteExpense } from '@/lib/actions';
 
 export function CreateExpense() {
   return (
@@ -16,7 +17,7 @@ export function CreateExpense() {
 export function UpdateExpense({ id }: { id: string }) {
   return (
     <Link
-      href="/dashboard/expenses"
+      href={`/dashboard/expenses/${id}/edit`}
       className="rounded-md border p-2 hover:bg-gray-100"
     >
       <PencilIcon className="w-5" />
@@ -25,12 +26,15 @@ export function UpdateExpense({ id }: { id: string }) {
 }
 
 export function DeleteExpense({ id }: { id: string }) {
+  const deleteExpenseWithId = deleteExpense.bind(null, id);
   return (
     <>
-      <button className="rounded-md border p-2 hover:bg-gray-100">
-        <span className="sr-only">Delete</span>
-        <TrashIcon className="w-5" />
-      </button>
+      <form action={deleteExpenseWithId}>
+        <button className="rounded-md border p-2 hover:bg-gray-100">
+          <span className="sr-only">Delete</span>
+          <TrashIcon className="w-5" />
+        </button>
+      </form>
     </>
   );
 }
