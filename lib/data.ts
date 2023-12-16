@@ -2,7 +2,7 @@ import { sql } from '@vercel/postgres';
 import {
   CustomerField,
   CustomersTableType,
-  InvoiceForm,
+  ExpenseForm,
   ExpensesTable,
   LatestExpenseRaw,
   User,
@@ -138,29 +138,28 @@ export async function fetchExpensesPages(query: string) {
   }
 }
 
-export async function fetchInvoiceById(id: string) {
+export async function fetchExpenseById(id: string) {
   noStore();
+  console.log(id);
   try {
-    const data = await sql<InvoiceForm>`
+    const data = await sql<ExpenseForm>`
       SELECT
-        invoices.id,
-        invoices.customer_id,
-        invoices.amount,
-        invoices.status
-      FROM invoices
-      WHERE invoices.id = ${id};
+        expenses.id,
+        expenses.amount
+      FROM expenses
+      WHERE expenses.id = ${id}
     `;
 
-    const invoice = data.rows.map((invoice) => ({
-      ...invoice,
+    const expense = data.rows.map((expense) => ({
+      ...expense,
       // Convert amount from cents to dollars
-      amount: invoice.amount / 100,
+      amount: expense.amount / 100,
     }));
 
-    return invoice[0];
+    return expense[0];
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch invoice.');
+    throw new Error('Failed to fetch expense.');
   }
 }
 
