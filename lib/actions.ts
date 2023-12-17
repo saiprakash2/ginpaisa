@@ -8,23 +8,50 @@ import { redirect } from 'next/navigation';
 const FormSchema = z.object({
     id: z.string(),
     user_id: z.string(),
-    amount: z.coerce.number(),
+    amount: z.coerce.number().gt(0, { message: 'Please enter an amount greater than $0.' }),
     date: z.string(),
   });
    
-const CreateExpense = FormSchema.omit({ id: true, user_id:true, date: true });
- 
-export async function createExpense(formData: FormData) {
-    const { amount } = CreateExpense.parse({
+  
+  export type State = {
+    errors?: {
+      customerId?: string[];
+      amount?: string[];
+      status?: string[];
+    };
+    message?: string | null;
+  };
+  
+  const CreateExpense = FormSchema.omit({ id: true, user_id:true, date: true });
+  
+export async function createExpense(prevState: State, formData: FormData) {
+  const validatedFields = CreateExpense.safeParse({
         amount: formData.get('amount'),
     });
+
+    if (!validatedFields.success) {
+      return {
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: 'Missing Fields. Failed to Create Expense.',
+      };
+    }
+
+    const {amount} = validatedFields.data;
+  
     const amountInCents = amount * 100;
     const date = new Date().toISOString().split('T')[0];
 
-    await sql`
-    INSERT INTO expenses (user_id, amount, date)
-    VALUES ('410544b2-4001-4271-9855-fec4b6a6442a', ${amountInCents}, ${date})
-  `;
+    try {      
+      await sql`
+      INSERT INTO expenses (user_id, amount, date)
+      VALUES ('410544b2-4001-4271-9855-fec4b6a6442a', ${amountInCents}, ${date})
+    `;
+    } catch (error) {
+      return {
+        message: 'Database Error: Failed to Create Expense.',
+      };
+    }
+
 
   revalidatePath('/dashboard/expenses');
   redirect('/dashboard/expenses');
@@ -39,18 +66,25 @@ export async function updateExpense(id: string, formData: FormData) {
   });
  
   const amountInCents = amount * 100;
+
+  try {    
+    await sql`
+      UPDATE expenses
+      SET amount = ${amountInCents}
+      WHERE id = ${id}
+    `;
+  } catch (error) {
+    return {
+      message:'Databse Error: Failed to Update Expense.',
+    };
+  }
  
-  await sql`
-    UPDATE expenses
-    SET amount = ${amountInCents}
-    WHERE id = ${id}
-  `;
  
   revalidatePath('/dashboard/expenses');
   redirect('/dashboard/expenses');
 }
 
 export async function deleteExpense(id: string) {
-    await sql`DELETE FROM expenses WHERE id = ${id}`;
-    revalidatePath('/dashboard/expenses');
+  throw new Error('Failed to Delete Invoice');
+
   }

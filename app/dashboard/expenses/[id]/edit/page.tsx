@@ -1,10 +1,13 @@
 import Form from '@/components/edit-form';
 import Breadcrumbs from '@/components/breadcrumbs';
 import { fetchExpenseById } from '@/lib/data';
+import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
   const [expense] = await Promise.all([fetchExpenseById(id)]);
+
+  if (!expense) notFound();
   return (
     <main>
       <Breadcrumbs
