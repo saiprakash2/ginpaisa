@@ -1,6 +1,6 @@
 import Pagination from '@/components/pagination';
 import Search from '@/components/search';
-import Table from '@/components/expenses/table';
+import Table from '@/components/expenseTable';
 import { CreateExpense } from '@/components/buttons';
 import { lusitana } from '@/styles/fonts';
 import { InvoicesTableSkeleton } from '@/components/skeletons';
