@@ -13,7 +13,7 @@ const Hero = () => {
           Track all your expenses.
         </h1>
         <p className="font-sans text-xl font-medium text-gray-600 md:py-5 md:text-2xl">
-          You can't measure it if you can't track it.
+          You can&apos;t measure it if you can&apos;t track it.
         </p>
         <div className="flex py-10 pl-10">
           <Link
