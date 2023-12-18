@@ -17,13 +17,13 @@ const Hero = () => {
         </p>
         <div className="flex py-10 pl-10">
           <Link
-            href="/signup"
+            href="/sign-up"
             className="mr-5 flex items-center gap-5 self-start rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base"
           >
             <span>Sign up</span> <ArrowRightIcon className="w-5 md:w-6" />
           </Link>
           <Link
-            href="/login"
+            href="/sign-in"
             className="flex items-center gap-5 self-start rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base"
           >
             <span>Log in</span> <ArrowRightIcon className="w-5 md:w-6" />
