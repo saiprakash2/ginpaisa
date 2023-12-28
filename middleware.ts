@@ -4,22 +4,23 @@ import { NextResponse } from "next/server";
 export default authMiddleware({
     publicRoutes: ["/"],
     afterAuth(auth, req, evt) {
-        // Handle users who aren't authenticated
-        if (!auth.userId && !auth.isPublicRoute) {
-          return redirectToSignIn({ returnBackUrl: req.url });
-        }
-        // // Redirect logged in users to organization selection page if they are not active in an organization
-        if(auth.userId && !auth.orgId && req.nextUrl.pathname !== "/dashboard") {
-          const orgSelection = new URL('/dashboard', req.url)
-          return NextResponse.redirect(orgSelection)
-        }
-        // If the user is logged in and trying to access a protected route, allow them to access route
-        if (auth.userId && !auth.isPublicRoute) {
-          return NextResponse.next()
-        }
-        // Allow users visiting public routes to access them
-        return NextResponse.next();
+
+      if (auth.userId && auth.isPublicRoute) {
+        return NextResponse.redirect(new URL('/dashboard', req.url));
       }
+
+      if (!auth.userId && !auth.isPublicRoute) {
+        return redirectToSignIn({ returnBackUrl: req.url });
+      }
+
+      if (auth.userId && !auth.isPublicRoute) {
+        return NextResponse.next()
+      }
+
+      return NextResponse.next();
+
+
+    }
 });
  
 export const config = {
