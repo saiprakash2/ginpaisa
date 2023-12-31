@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import {auth} from '@clerk/nextjs';
 
 const FormSchema = z.object({
     id: z.string(),
@@ -13,16 +14,17 @@ const FormSchema = z.object({
   });
    
   
-  export type State = {
-    errors?: {
-      customerId?: string[];
-      amount?: string[];
-      status?: string[];
-    };
-    message?: string | null;
+export type State = {
+  errors?: {
+    customerId?: string[];
+    amount?: string[];
+    status?: string[];
   };
+  message?: string | null;
+};
   
-  const CreateExpense = FormSchema.omit({ id: true, user_id:true, date: true });
+const CreateExpense = FormSchema.omit({ id: true, user_id:true, date: true });
+const { userId } = auth();
   
 export async function createExpense(prevState: State, formData: FormData) {
   const validatedFields = CreateExpense.safeParse({
@@ -44,7 +46,7 @@ export async function createExpense(prevState: State, formData: FormData) {
     try {      
       await sql`
       INSERT INTO expenses (user_id, amount, date)
-      VALUES ('410544b2-4001-4271-9855-fec4b6a6442a', ${amountInCents}, ${date})
+      VALUES (${userId}, ${amountInCents}, ${date})
     `;
     } catch (error) {
       return {
@@ -86,5 +88,5 @@ export async function updateExpense(id: string, formData: FormData) {
 
 export async function deleteExpense(id: string) {
   throw new Error('Failed to Delete Invoice');
-
-  }
+  
+}
