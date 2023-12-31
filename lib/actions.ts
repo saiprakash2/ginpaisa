@@ -24,12 +24,13 @@ export type State = {
 };
   
 const CreateExpense = FormSchema.omit({ id: true, user_id:true, date: true });
-const { userId } = auth();
+
   
 export async function createExpense(prevState: State, formData: FormData) {
   const validatedFields = CreateExpense.safeParse({
         amount: formData.get('amount'),
     });
+  const { userId } = auth();
 
     if (!validatedFields.success) {
       return {
