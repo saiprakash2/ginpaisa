@@ -10,23 +10,16 @@ import {
 } from './definitions';
 import { formatCurrency } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
+import {auth} from '@clerk/nextjs';
+
+
+
 
 export async function fetchRevenue() {
-  // Add noStore() here prevent the response from being cached.
-  // This is equivalent to in fetch(..., {cache: 'no-store'}).
   noStore();
-
+  
   try {
-    // Artificially delay a response for demo purposes.
-    // Don't do this in production :)
-
-    // console.log('Fetching revenue data...');
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
-
     const data = await sql<Revenue>`SELECT * FROM revenue`;
-
-    // console.log('Data fetch completed after 3 seconds.');
-
     return data.rows;
   } catch (error) {
     console.error('Database Error:', error);
@@ -36,6 +29,7 @@ export async function fetchRevenue() {
 
 export async function fetchLatestExpenses() {
   noStore();
+  const { userId } = auth();
 
   try {
     const data = await sql<LatestExpenseRaw>`
@@ -98,6 +92,7 @@ export async function fetchFilteredExpenses(
 ) {
   noStore();
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+  const { userId } = auth();
 
   try {
     const expenses = await sql<ExpensesTable>`
@@ -107,8 +102,9 @@ export async function fetchFilteredExpenses(
         expenses.date
       FROM expenses
       WHERE
-        expenses.amount::text ILIKE ${`%${query}%`} OR
-        expenses.date::text ILIKE ${`%${query}%`}
+        expenses.user_id::text = ${userId} AND
+        (expenses.amount::text ILIKE ${`%${query}%`} OR
+        expenses.date::text ILIKE ${`%${query}%`})
       ORDER BY expenses.date DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
@@ -140,7 +136,7 @@ export async function fetchExpensesPages(query: string) {
 
 export async function fetchExpenseById(id: string) {
   noStore();
-  console.log(id);
+  const { userId } = auth();
   try {
     const data = await sql<ExpenseForm>`
       SELECT

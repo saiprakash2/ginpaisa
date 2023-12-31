@@ -6,6 +6,7 @@ import { lusitana } from '@/styles/fonts';
 import { InvoicesTableSkeleton } from '@/components/skeletons';
 import { Suspense } from 'react';
 import { fetchExpensesPages } from '@/lib/data';
+import { auth } from '@clerk/nextjs';
 
 export default async function Page({
   searchParams,
@@ -15,6 +16,8 @@ export default async function Page({
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
   const totalPages = await fetchExpensesPages(query);
+  const { userId } = auth();
+
   return (
     <div className="w-full">
       <div className="flex w-full items-center justify-between">

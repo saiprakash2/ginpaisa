@@ -33,15 +33,15 @@ const Hero = () => {
 
       <div className="flex md:px-10 md:py-24">
         <Image
-          src="/hero-desktop.png"
+          src="/hero-desktop.jpg"
           className="hidden md:block"
           alt={'Icon'}
-          width={800}
+          width={1200}
           height={500}
         />
 
         <Image
-          src="/hero-mobile.png"
+          src="/hero-desktop.jpg"
           width={380}
           height={400}
           className="block md:hidden"
