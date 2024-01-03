@@ -32,13 +32,17 @@ export type LatestExpense = {
 
 export type LatestExpenseRaw = Omit<LatestExpense, 'amount'> & {
   amount: number;
+  name: string;
 };
 
 export type ExpensesTable = {
   id: string;
   user_id:string;
+  name:string;
+  type:string;
   amount: number;
-  date: string;
+  created_date: string;
+  updated_date: string;
 };
 
 export type CustomersTableType = {
@@ -68,5 +72,6 @@ export type CustomerField = {
 
 export type ExpenseForm = {
   id: string;
+  name:string;
   amount: number;
 };

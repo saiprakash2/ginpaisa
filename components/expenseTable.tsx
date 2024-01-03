@@ -12,8 +12,6 @@ export default async function InvoicesTable({
 }) {
   const expenses = await fetchFilteredExpenses(query, currentPage);
 
-  console.log(expenses);
-
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
@@ -24,18 +22,15 @@ export default async function InvoicesTable({
                 <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
                   Name
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
+                {/* <th scope="col" className="px-3 py-5 font-medium">
                   Type
-                </th>
+                </th> */}
                 <th scope="col" className="px-3 py-5 font-medium">
                   Amount
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Date
                 </th>
-                {/* <th scope="col" className="px-3 py-5 font-medium">
-                  Status
-                </th> */}
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>
                 </th>
@@ -48,14 +43,14 @@ export default async function InvoicesTable({
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                 >
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                    {expense.id}
+                    {expense.name}
                   </td>
-                  <td className="whitespace-nowrap py-3 pl-6 pr-3">Food</td>
+                  {/* <td className="whitespace-nowrap py-3 pl-6 pr-3">Food</td> */}
                   <td className="whitespace-nowrap px-3 py-3">
                     {formatCurrency(expense.amount)}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {formatDateToLocal(expense.date)}
+                    {formatDateToLocal(expense.created_date)}
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">

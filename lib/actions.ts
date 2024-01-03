@@ -6,9 +6,11 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import {auth} from '@clerk/nextjs';
 
+
 const FormSchema = z.object({
     id: z.string(),
     user_id: z.string(),
+    name:z.string(),
     amount: z.coerce.number().gt(0, { message: 'Please enter an amount greater than $0.' }),
     date: z.string(),
   });
@@ -29,6 +31,7 @@ const CreateExpense = FormSchema.omit({ id: true, user_id:true, date: true });
 export async function createExpense(prevState: State, formData: FormData) {
   const validatedFields = CreateExpense.safeParse({
         amount: formData.get('amount'),
+        name: formData.get('name'),
     });
   const { userId } = auth();
 
@@ -40,14 +43,17 @@ export async function createExpense(prevState: State, formData: FormData) {
     }
 
     const {amount} = validatedFields.data;
+    const {name} = validatedFields.data;
+
   
     const amountInCents = amount * 100;
     const date = new Date().toISOString().split('T')[0];
+    const type = "Food";
 
     try {      
       await sql`
-      INSERT INTO expenses (user_id, amount, date)
-      VALUES (${userId}, ${amountInCents}, ${date})
+      INSERT INTO expenses (user_id, name, type, amount, created_date, updated_date)
+      VALUES (${userId}, ${name}, ${type}, ${amountInCents}, ${date}, ${date})
     `;
     } catch (error) {
       return {
@@ -64,8 +70,9 @@ export async function createExpense(prevState: State, formData: FormData) {
 const UpdateExpense = FormSchema.omit({ id: true, user_id:true, date: true });
 
 export async function updateExpense(id: string, formData: FormData) {
-  const { amount } = UpdateExpense.parse({
-    amount: formData.get('amount')
+  const { amount, name } = UpdateExpense.parse({
+    amount: formData.get('amount'),
+    name: formData.get('name')
   });
  
   const amountInCents = amount * 100;
@@ -73,12 +80,12 @@ export async function updateExpense(id: string, formData: FormData) {
   try {    
     await sql`
       UPDATE expenses
-      SET amount = ${amountInCents}
+      SET amount = ${amountInCents}, name = ${name}
       WHERE id = ${id}
     `;
   } catch (error) {
     return {
-      message:'Databse Error: Failed to Update Expense.',
+      message:'Database Error: Failed to Update Expense.',
     };
   }
  
@@ -88,6 +95,17 @@ export async function updateExpense(id: string, formData: FormData) {
 }
 
 export async function deleteExpense(id: string) {
-  throw new Error('Failed to Delete Invoice');
-  
+
+  try {
+    await sql`
+    Delete from expenses 
+    WHERE id =${id}
+    `;
+  } catch (error) {
+    return {
+      message:'Database Error: Failed to Delete Expense.',
+    };
+  }
+  revalidatePath('/dashboard/expenses');
+  redirect('/dashboard/expenses');
 }
