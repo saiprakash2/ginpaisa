@@ -2,6 +2,11 @@ import LatestInvoices from '@/components/latest-invoices';
 import { lusitana } from '@/styles/fonts';
 import { Suspense } from 'react';
 import { LatestInvoicesSkeleton } from '@/components/skeletons';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Dashboard',
+};
 
 export default async function Page() {
   return (

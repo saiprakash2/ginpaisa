@@ -7,6 +7,11 @@ import { InvoicesTableSkeleton } from '@/components/skeletons';
 import { Suspense } from 'react';
 import { fetchExpensesPages } from '@/lib/data';
 import { auth } from '@clerk/nextjs';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Expenses',
+};
 
 export default async function Page({
   searchParams,
