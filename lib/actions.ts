@@ -10,7 +10,9 @@ import {auth} from '@clerk/nextjs';
 const FormSchema = z.object({
     id: z.string(),
     user_id: z.string(),
-    name:z.string(),
+    name: z.string().refine(value => value.trim() !== '', {
+      message: 'Please enter a name.',
+    }),
     amount: z.coerce.number().gt(0, { message: 'Please enter an amount greater than $0.' }),
     date: z.string(),
   });
@@ -19,6 +21,7 @@ const FormSchema = z.object({
 export type State = {
   errors?: {
     customerId?: string[];
+    name?:string[];
     amount?: string[];
     status?: string[];
   };
@@ -69,7 +72,7 @@ export async function createExpense(prevState: State, formData: FormData) {
 
 const UpdateExpense = FormSchema.omit({ id: true, user_id:true, date: true });
 
-export async function updateExpense(id: string, formData: FormData) {
+export async function updateExpense(id: string,formData: FormData) {
   const { amount, name } = UpdateExpense.parse({
     amount: formData.get('amount'),
     name: formData.get('name')
