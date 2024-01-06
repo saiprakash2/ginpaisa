@@ -22,9 +22,6 @@ export default async function InvoicesTable({
                 <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
                   Name
                 </th>
-                {/* <th scope="col" className="px-3 py-5 font-medium">
-                  Type
-                </th> */}
                 <th scope="col" className="px-3 py-5 font-medium">
                   Amount
                 </th>
@@ -45,7 +42,6 @@ export default async function InvoicesTable({
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     {expense.name}
                   </td>
-                  {/* <td className="whitespace-nowrap py-3 pl-6 pr-3">Food</td> */}
                   <td className="whitespace-nowrap px-3 py-3">
                     {formatCurrency(expense.amount)}
                   </td>

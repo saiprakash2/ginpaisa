@@ -1,13 +1,6 @@
 'use client';
-import { CustomerField } from '@/lib/definitions';
 import Link from 'next/link';
-import {
-  CheckIcon,
-  ClockIcon,
-  CurrencyDollarIcon,
-  UserIcon,
-  UserCircleIcon,
-} from '@heroicons/react/24/outline';
+import { CurrencyDollarIcon, UserIcon } from '@heroicons/react/24/outline';
 
 import { Button } from '@/components/button';
 import { createExpense } from '@/lib/actions';
@@ -36,12 +29,12 @@ export default function Form() {
               <UserIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
             <div id="name-error" aria-live="polite" aria-atomic="true">
-              {/* {state.errors?.name &&
+              {state.errors?.name &&
                 state.errors.name.map((error: string) => (
                   <p className="mt-2 text-sm text-red-500" key={error}>
                     {error}
                   </p>
-                ))} */}
+                ))}
             </div>
           </div>
         </div>

@@ -2,13 +2,7 @@
 
 import { ExpenseForm } from '@/lib/definitions';
 import { updateExpense } from '@/lib/actions';
-import {
-  CheckIcon,
-  ClockIcon,
-  CurrencyDollarIcon,
-  UserCircleIcon,
-  UserIcon,
-} from '@heroicons/react/24/outline';
+import { CurrencyDollarIcon, UserIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/components/button';
 
@@ -34,14 +28,14 @@ export default function EditInvoiceForm({ expense }: { expense: ExpenseForm }) {
               />
               <UserIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
-            <div id="name-error" aria-live="polite" aria-atomic="true">
-              {/* {state.errors?.name &&
+            {/* <div id="name-error" aria-live="polite" aria-atomic="true">
+              {state.errors?.name &&
                 state.errors.name.map((error: string) => (
                   <p className="mt-2 text-sm text-red-500" key={error}>
                     {error}
                   </p>
-                ))} */}
-            </div>
+                ))}
+            </div> */}
           </div>
         </div>
         <div className="mb-4">
