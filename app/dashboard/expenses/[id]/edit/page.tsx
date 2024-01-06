@@ -3,6 +3,11 @@ import Breadcrumbs from '@/components/breadcrumbs';
 import { fetchExpenseById } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import { auth } from '@clerk/nextjs';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Expense - Edit expense',
+};
 
 export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id;

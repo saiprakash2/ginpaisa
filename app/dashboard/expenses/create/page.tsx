@@ -1,5 +1,10 @@
 import Form from '@/components/create-form';
 import Breadcrumbs from '@/components/breadcrumbs';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Expense - Add expense',
+};
 
 export default async function Page() {
   return (
@@ -8,7 +13,7 @@ export default async function Page() {
         breadcrumbs={[
           { label: 'Expenses', href: '/dashboard/expenses' },
           {
-            label: 'Create Expense',
+            label: 'Add Expense',
             href: '/dashboard/expenses/create',
             active: true,
           },

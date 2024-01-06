@@ -1,6 +1,15 @@
 import '@/styles/global.css';
 import { inter } from '@/styles/fonts';
 import { ClerkProvider } from '@clerk/nextjs';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: {
+    template: '%s | Ginpaisa',
+    default: 'Ginpaisa',
+  },
+  description: 'Expense tracking applicaiton',
+};
 
 export default function RootLayout({
   children,
