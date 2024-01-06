@@ -3,7 +3,7 @@ import { UpdateExpense, DeleteExpense } from '@/components/buttons';
 import { formatDateToLocal, formatCurrency } from '@/lib/utils';
 import { fetchFilteredExpenses } from '@/lib/data';
 
-export default async function InvoicesTable({
+export default async function ExpensesTable({
   query,
   currentPage,
 }: {

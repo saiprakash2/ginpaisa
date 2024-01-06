@@ -54,6 +54,7 @@ export async function fetchFilteredExpenses(
       WHERE
         expenses.user_id::text = ${userId} AND
         (expenses.amount::text ILIKE ${`%${query}%`} OR
+        expenses.name::text ILIKE ${`%${query}%`} OR
         expenses.created_date::text ILIKE ${`%${query}%`})
       ORDER BY expenses.created_date DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
