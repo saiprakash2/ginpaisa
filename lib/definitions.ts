@@ -2,11 +2,12 @@
 export type LatestExpense = {
   id: string;
   amount: string;
+  name: string;
+  created_date: string;
 };
 
 export type LatestExpenseRaw = Omit<LatestExpense, 'amount'> & {
   amount: number;
-  name: string;
 };
 
 export type ExpensesTable = {

@@ -15,7 +15,7 @@ export async function fetchLatestExpenses() {
 
   try {
     const data = await sql<LatestExpenseRaw>`
-      SELECT expenses.amount, expenses.id, expenses.name
+      SELECT expenses.amount, expenses.id, expenses.name, expenses.created_date
       FROM expenses
       where
       expenses.user_id::text = ${userId}
