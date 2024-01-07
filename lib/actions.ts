@@ -50,7 +50,7 @@ export async function createExpense(prevState: State, formData: FormData) {
 
   
     const amountInCents = amount * 100;
-    const date = new Date().toISOString().split('T')[0];
+    const date = new Date().toISOString();
     const type = "Food";
 
     try {      
